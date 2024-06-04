@@ -1,5 +1,5 @@
-var trex, trex_running, edges;
-var groundImage;
+var trex, trex_running, edges, trex_collided;
+var groundImage, invisibleGround, groundImage;
 
 function preload(){
   trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -17,6 +17,14 @@ function setup(){
   //agregar tamaño y posición al Trex
   trex.scale = 0.5;
   trex.x = 50
+  
+  ground = createSprite(200,180,400,20);
+  ground.addImage("ground",groundImage);
+  ground.x = ground.width /2;
+  ground.velocityX = -4;
+
+  invisibleGround = createSprite(200,190,400,10);
+  invisibleGround.visible =false;
 }
 
 
@@ -28,13 +36,18 @@ function draw(){
   console.log(trex.y)
   
   //hacer que el Trex salte al presionar la barra espaciadora
-  if(keyDown("space")){
+  if(keyDown("space") && trex.y >= 150 ){
     trex.velocityY = -10;
   }
   
   trex.velocityY = trex.velocityY + 0.5;
+
+  if (ground.x < 0){
+    ground.x = ground.width/2;
+  }
   
   //evitar que el Trex caiga
-  trex.collide(edges[3])
+  trex.collide(invisibleGround);
+  
   drawSprites();
 }
